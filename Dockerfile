@@ -30,9 +30,7 @@ COPY . /var/www/html
 
 RUN npm install
 
-RUN composer install --no-dev --optimize-autoloader --no-scripts
-
-RUN php artisan package:discover --ansi
+RUN composer install --no-dev --optimize-autoloader
 
 RUN npm run build
 
