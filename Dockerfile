@@ -26,11 +26,11 @@ WORKDIR /var/www/html
 COPY composer.json composer.lock ./
 COPY package*.json ./
 
-RUN npm install
-RUN composer install --no-dev --optimize-autoloader --no-scripts
-
-
 COPY . /var/www/html
+
+RUN npm install
+
+RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 RUN php artisan package:discover --ansi
 
