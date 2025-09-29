@@ -13,7 +13,8 @@ RUN apk add --no-cache \
     libpng-dev \
     freetype-dev \
     nodejs \
-    npm
+    npm \
+    bash
 
 RUN docker-php-ext-install intl pdo pdo_pgsql mbstring xml opcache bcmath pcntl gd exif
 
@@ -23,13 +24,17 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 WORKDIR /var/www/html
 
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader
-
 COPY package*.json ./
+
 RUN npm install
-RUN npm run build
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
 
 COPY . /var/www/html
+
+RUN php artisan package:discover --ansi
+
+RUN npm run build
 
 RUN chown -R www-data:www-data /var/www/html
 
